@@ -1,0 +1,52 @@
+class Solution {
+    public int longestPalindrome(String[] words) {
+       HashMap<String,Integer>  hash1=new HashMap<>();
+       for(int i=0;i<words.length;i++)
+       {
+           if(hash1.get(words[i])==null){
+               hash1.put(words[i],1);
+           }
+           else
+               hash1.put(words[i],hash1.get(words[i])+1);
+       }
+        int count=0;
+        for(Map.Entry entries :hash1.entrySet()){
+            String key=(String)entries.getKey();
+            String              rev=String.valueOf(key.charAt(1))+String.valueOf(key.charAt(0));
+            int value=((int)entries.getValue());
+            if(hash1.get(rev)!=null){
+                if(key.equals(rev)){
+                    if(hash1.get(rev)%2==0)
+                    {
+                        count+=hash1.get(rev);
+                        hash1.put(key,0);
+                    }
+                    else{
+                        count+=hash1.get(rev)-1;
+                        hash1.put(rev,1);
+                    }
+                }
+                else{
+                    count+=Math.min(hash1.get(rev),hash1.get(key))*2;
+                    hash1.put(key,0);
+                    hash1.put(rev,0);
+                }
+            }
+           
+        }
+        count=count*2;
+        int max=0;
+        for(Map.Entry entries2:hash1.entrySet()){
+            String key=(String)entries2.getKey();
+            String rev=String.valueOf(key.charAt(1))+String.valueOf(key.charAt(0));
+            int value=((int)entries2.getValue());
+            
+            if(key.equals(rev)){
+                if(value>max)
+                    max=value;
+            }
+        }
+        count+=(max*2);
+        return count;
+    }
+}
